@@ -1,0 +1,39 @@
+// middlewares/authMiddleware.js
+const jwt = require('jsonwebtoken');
+const logger = require('../config/logger');
+
+module.exports = (req, res, next) => {
+  // Lista blanca de rutas públicas
+  const publicRoutes = [
+    { path: '/api/login', method: 'POST' },
+    { path: '/api/swaggerUI', method: 'GET' },
+    { path: '/simple', method: 'GET' }
+  ];
+
+  // Verifica si la ruta actual es pública
+  const isPublicRoute = publicRoutes.some(
+    route => route.path === req.path && route.method === req.method
+  );
+
+  if (isPublicRoute) {
+    return next(); 
+  }
+
+  // Verifica el token para rutas protegidas
+  const token = req.headers['authorization']?.split(' ')[1];
+
+  if (!token) {
+    logger.warn('Intento de acceso sin token', { route: req.path });
+    return res.status(401).json({ error: 'Token requerido' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    logger.info(`Acceso autorizado a ${req.path} para usuario: ${decoded.id}`);
+    next();
+  } catch (err) {
+    logger.error('Token inválido', { error: err.message });
+    return res.status(403).json({ error: 'Token inválido o expirado' });
+  }
+};

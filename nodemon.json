@@ -1,0 +1,9 @@
+{
+  "watch": ["src", "config","handlers","middleware", "routes.js","index.js","server.js", ".env"], 
+  "ignore": ["logs/*", "node_modules"],            
+  "ext": "js,json,env",                            
+  "exec": "node server.js",                         
+  "env": {
+    "NODE_ENV": "development"                      
+  }
+}
