@@ -1,0 +1,31 @@
+name: Deploy to publish
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        path: 'repo' 
+    - name: Upload files via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.0
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: './repo/'
+        server-dir: ${{ secrets.FTP_DIRECTORY }}  
+        exclude: |
+          **/.git/**
+          **/.github/**
+          **/README.md
+          **/.ftp-deploy-sync-state.json
+      env:
+        FTP_DEPLOY_DEBUG: "true" 
+    
