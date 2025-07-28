@@ -20,27 +20,6 @@ module.exports = function main (options, cb) {
   let serverStarted = false
   let serverClosing = false
 
-  // Setup error handling
-  function unhandledError (err) {
-    // Log the errors
-    logger.error(err)
-
-    // Only clean up once
-    if (serverClosing) {
-      return
-    }
-    serverClosing = true
-
-    // If server has started, close it down
-    if (serverStarted) {
-      server.close(function () {
-        process.exit(1)
-      })
-    }
-  }
-  process.on('uncaughtException', unhandledError)
-  process.on('unhandledRejection', unhandledError)
-
   // Create the express app
   const app = express()
   // Common middleware
@@ -53,15 +32,7 @@ module.exports = function main (options, cb) {
   require('./routes')(app, opts)
 
   // Start server
-  server = app.listen(opts.port, function (err) {
-    if (err) {
-      return ready(err, app, server)
-    }
-    // If some other error means we should close
-    if (serverClosing) {
-      return ready(new Error('Server was closed before it could start'))
-    }
-
+  server = app.listen(opts.port, ()=> {
     serverStarted = true
     const addr = server.address()
     logger.info(`Started at ${ addr.host || 'localhost'}:${addr.port}`);
