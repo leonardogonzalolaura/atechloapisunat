@@ -1,7 +1,7 @@
 'use strict';
 const main = require('./index');
 const options = {
-  port: process.env.PORT || 5000, 
+  port: process.env.PORT || 3000, 
   host: process.env.HOST || '0.0.0.0'
 };
 

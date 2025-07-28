@@ -69,7 +69,7 @@ module.exports = function main (options, cb) {
   })
 
   // Start server
-  server = app.listen(opts.port, opts.host, function (err) {
+  server = app.listen(opts.port, function (err) {
     if (err) {
       return ready(err, app, server)
     }
@@ -80,7 +80,7 @@ module.exports = function main (options, cb) {
 
     serverStarted = true
     const addr = server.address()
-    logger.info(`Started at ${opts.host || addr.host || 'localhost'}:${addr.port}`)
+    logger.info(`Started `)
     ready(err, app, server)
   })
 }
