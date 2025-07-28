@@ -4,7 +4,7 @@ const security = require('./handlers/security')
 //const configured = require('./handlers/configured')
 const { swaggerServe, swaggerSetup } = require('./middleware/swagger_doc');
 
-module.exports = function (app, opts) {
+module.exports = function (app) {
   // Setup routes, middleware, and handlers
   app.use('/apisunat/swaggerUI', swaggerServe , swaggerSetup );
   app.get('/apisunat/health', (req, res) => res.send('OK'))
