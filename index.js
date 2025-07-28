@@ -44,6 +44,8 @@ module.exports = function main (options, cb) {
   // Create the express app
   const app = express()
   // Common middleware
+  app.use(helmet());
+  app.use(compression());
   app.use(express.json())
   //app.use(pinoHttp({ logger }))
   
@@ -66,8 +68,6 @@ module.exports = function main (options, cb) {
     })
   })
 
-app.use(helmet());
-app.use(compression());
   // Start server
   server = app.listen(opts.port, opts.host, function (err) {
     if (err) {
