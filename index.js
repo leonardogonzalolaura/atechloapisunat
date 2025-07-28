@@ -52,22 +52,6 @@ module.exports = function main (options, cb) {
   // Register routes
   require('./routes')(app, opts)
 
-  // Common error handlers
-  app.use(function fourOhFourHandler (req, res, next) {
-    next(httpErrors(404, `Route not found: ${req.url}`))
-  })
-  app.use(function fiveHundredHandler (err, req, res, next) {
-    if (err.status >= 500) {
-      logger.error(err)
-    }
-    res.status(err.status || 500).json({
-      messages: [{
-        code: err.code || 'InternalServerError',
-        message: err.message
-      }]
-    })
-  })
-
   // Start server
   server = app.listen(opts.port, function (err) {
     if (err) {
@@ -80,7 +64,7 @@ module.exports = function main (options, cb) {
 
     serverStarted = true
     const addr = server.address()
-    logger.info(`Started `)
+    logger.info(`Started at ${ addr.host || 'localhost'}:${addr.port}`);
     ready(err, app, server)
   })
 }
