@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const logger = require('../config/logger');
 /**
  * @swagger
- * /api/login:
+ * /apisunat/login:
  *   post:
  *     summary: Iniciar sesión
  *     requestBody:
