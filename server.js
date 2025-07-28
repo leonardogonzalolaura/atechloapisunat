@@ -1,11 +1,11 @@
 'use strict';
-const main = require('./index'); 
+const main = require('./index');
 const options = {
   port: process.env.PORT || 5000, 
   host: process.env.HOST || '0.0.0.0'
 };
 
-// Inicia el servidor
+// Inicia el servidor de Express
 main(options, (err, app, server) => {
   if (err) {
     console.error('Error starting server:', err);
