@@ -9,5 +9,5 @@ module.exports = function (app, opts) {
   app.use('/apisunat/swaggerUI', swaggerServe , swaggerSetup );
   app.use(authMiddleware);
   app.post('/apisunat/login', security)
-  app.get('/configured', configured(opts))
+  app.get('/apisunat/configured', configured(opts))
 }
