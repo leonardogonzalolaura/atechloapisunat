@@ -5,9 +5,8 @@ const logger = require('../config/logger');
 module.exports = (req, res, next) => {
   // Lista blanca de rutas públicas
   const publicRoutes = [
-    { path: '/api/login', method: 'POST' },
-    { path: '/api/swaggerUI', method: 'GET' },
-    { path: '/simple', method: 'GET' }
+    { path: '/apisunat/login', method: 'POST' },
+    { path: '/apisunat/swaggerUI', method: 'GET' }
   ];
 
   // Verifica si la ruta actual es pública
