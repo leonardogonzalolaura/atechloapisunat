@@ -6,6 +6,7 @@ module.exports = (req, res, next) => {
   // Lista blanca de rutas públicas
   const publicRoutes = [
     { path: '/apisunat/login', method: 'POST' },
+    { path: '/apisunat/validate', method: 'POST' },
     { path: '/apisunat/swaggerUI', method: 'GET' }
   ];
 

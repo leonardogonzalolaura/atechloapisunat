@@ -18,13 +18,15 @@ const swaggerOptions = {
         },
         BearerAuth: {
           type: 'http',
+          description: 'JWT Authorization header using the Bearer scheme.',
           scheme: 'bearer',
           bearerFormat: 'JWT'
+
         }
       }
     },
     security: [{
-      ApiKeyAuth: []
+      BearerAuth: []
     }],
     servers: [
       {

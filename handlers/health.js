@@ -4,6 +4,7 @@
  *   get:
  *     summary: Health check
  *     description: Check the health of the API
+ *     security: [] 
  *     responses:
  *       200:
  *         description: OK

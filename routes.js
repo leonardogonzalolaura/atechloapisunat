@@ -1,8 +1,8 @@
 'use strict'
 const authMiddleware = require('./middleware/authMiddleware');
-const security = require('./handlers/security')
 const health = require('./handlers/health')
-//const configured = require('./handlers/configured')
+const { login, verifyToken } = require('./handlers/security')
+const register = require('./handlers/register')
 const { swaggerServe, swaggerSetup } = require('./middleware/swagger_doc');
 
 module.exports = function (app) {
@@ -10,6 +10,7 @@ module.exports = function (app) {
   app.use('/apisunat/swaggerUI', swaggerServe , swaggerSetup );
   app.get('/apisunat/health', health)
   app.use(authMiddleware);
-  app.post('/apisunat/login', security)
-  //app.get('/apisunat/configured', configured(opts))
+  app.post('/apisunat/login', login);
+  app.post('/apisunat/validate', verifyToken);
+  app.post('/apisunat/register', register);
 }

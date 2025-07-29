@@ -7,6 +7,7 @@ const logger = require('../config/logger');
  *   post:
  *     summary: Iniciar sesión
  *     description: Inicia sesión en la API
+ *     security: [] 
  *     requestBody:
  *       required: true
  *       content:
@@ -47,7 +48,7 @@ const logger = require('../config/logger');
  *                 error:
  *                   type: string 
  */
-module.exports = function(req, res) {
+const login = (req, res) => {
   
   const { user, password } = req.body; 
   
@@ -67,3 +68,49 @@ module.exports = function(req, res) {
   );
   res.json({ token });
 }
+
+/** 
+ * @swagger
+ * /apisunat/validate:
+ *   post:
+ *     summary: Verificar token
+ *     description: Verifica el token proporcionado
+ *     security: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *       401:
+ *         description: Unauthorized
+*/
+
+const verifyToken = (req, res, next) => {
+  const { token } = req.body;
+
+  if (!token) {
+    return res.status(401).json({ error: 'Token no proporcionado' });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      logger.error(err);
+      return res.status(401).json({ error: 'Token inválido' });
+    }
+    
+    res.status(200).json({ message: "Token válido", user: decoded.id });
+  });
+}
+
+
+module.exports = {
+  login,
+  verifyToken
+};
