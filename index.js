@@ -12,8 +12,6 @@ const PORT = process.env.PORT || 3000;
 module.exports = function main (options, cb) {
   // Server state
   let server
-  let serverStarted = false
-  let serverClosing = false
 
   // Create the express app
   const app = express()
@@ -21,6 +19,7 @@ module.exports = function main (options, cb) {
   app.use(helmet());
   app.use(compression());
   app.use(express.json())
+  app.use(express.urlencoded({ extended: true }));
   //app.use(pinoHttp({ logger }))
   
   // Register routes

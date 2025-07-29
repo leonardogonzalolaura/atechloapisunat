@@ -6,6 +6,7 @@ const logger = require('../config/logger');
  * /apisunat/login:
  *   post:
  *     summary: Iniciar sesión
+ *     description: Inicia sesión en la API
  *     requestBody:
  *       required: true
  *       content:
