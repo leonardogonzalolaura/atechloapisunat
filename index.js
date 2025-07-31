@@ -1,5 +1,6 @@
 'use strict'
 const express = require('express')
+const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const httpErrors = require('http-errors')
@@ -16,6 +17,7 @@ module.exports = function main (options, cb) {
   // Create the express app
   const app = express()
   // Common middleware
+  app.use(cors());
   app.use(helmet());
   app.use(compression());
   app.use(express.json())
