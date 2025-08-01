@@ -7,6 +7,7 @@ const httpErrors = require('http-errors')
 const logger = require('./config/logger');
 const pinoHttp = require('pino-http')
 const dotenv = require('dotenv');
+const sequelize = require('./config/database');
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -28,10 +29,17 @@ module.exports = function main (options, cb) {
   require('./routes')(app)
 
   // Start server
-  server = app.listen(PORT, ()=> {
+  server = app.listen(PORT, async ()=> {
+    try {
+      await sequelize.authenticate();
+      logger.info('Database connected successfully');
+    } catch (error) {
+      logger.error('Unable to connect to database:', error.message);
+    }
+    
     const serverUrl = process.env.NODE_ENV === 'production' 
     ? process.env.SERVER_URL_PRODUCTION 
-    : `http://localhost:${PORT}`;
+    : `https://localhost:${PORT}`;
     const addr = server.address()
     logger.info(`Started at ${ addr.host || 'localhost'}:${addr.port}`);
     
