@@ -170,7 +170,8 @@ const register = async (req, res) => {
 
     res.status(500).json({
       success: false,
-      message: 'Error interno del servidor'
+      message: 'Error interno del servidor',
+      error: error.message
     });
   }
 };
