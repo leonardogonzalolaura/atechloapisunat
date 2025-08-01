@@ -1,6 +1,7 @@
 'use strict'
 
 const bcrypt = require('bcrypt');
+const { Op } = require('sequelize');
 const User = require('../models/User');
 const logger = require('../config/logger');
 
@@ -19,12 +20,18 @@ const logger = require('../config/logger');
  *             type: object
  *             required:
  *               - email
+ *               - username
  *               - password
  *             properties:
  *               email:
  *                 type: string
  *                 format: email
  *                 example: "usuario@ejemplo.com"
+ *               username:
+ *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 50
+ *                 example: "miusuario123"
  *               password:
  *                 type: string
  *                 minLength: 6
@@ -56,9 +63,15 @@ const logger = require('../config/logger');
  *                     email:
  *                       type: string
  *                       example: "usuario@ejemplo.com"
+ *                     username:
+ *                       type: string
+ *                       example: "miusuario123"
  *                     is_trial:
  *                       type: boolean
  *                       example: true
+ *                     subscription_plan:
+ *                       type: string
+ *                       example: "free"
  *                     trial_end_date:
  *                       type: string
  *                       format: date-time
@@ -74,7 +87,7 @@ const logger = require('../config/logger');
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: "Email y contraseña son requeridos"
+ *                   example: "Email, username y contraseña son requeridos"
  *       409:
  *         description: Usuario ya existe
  *         content:
@@ -87,7 +100,7 @@ const logger = require('../config/logger');
  *                   example: false
  *                 message:
  *                   type: string
- *                   example: "El email ya está registrado"
+ *                   example: "El email o username ya está registrado"
  *       500:
  *         description: Error interno del servidor
  *         content:
@@ -104,13 +117,13 @@ const logger = require('../config/logger');
  */
 const register = async (req, res) => {
   try {
-    const { email, password, company_id } = req.body;
+    const { email, username, password, company_id } = req.body;
 
     // Validación de datos
-    if (!email || !password) {
+    if (!email || !username || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Email y contraseña son requeridos'
+        message: 'Email, username y contraseña son requeridos'
       });
     }
 
@@ -121,12 +134,27 @@ const register = async (req, res) => {
       });
     }
 
-    // Verificar si el usuario ya existe
-    const existingUser = await User.findOne({ where: { email } });
+    if (username.length < 3 || username.length > 50) {
+      return res.status(400).json({
+        success: false,
+        message: 'El username debe tener entre 3 y 50 caracteres'
+      });
+    }
+
+    // Verificar si el usuario ya existe (email o username)
+    const existingUser = await User.findOne({ 
+      where: { 
+        [Op.or]: [
+          { email },
+          { username }
+        ]
+      } 
+    });
+    
     if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: 'El email ya está registrado'
+        message: 'El email o username ya está registrado'
       });
     }
 
@@ -137,6 +165,7 @@ const register = async (req, res) => {
     // Crear usuario
     const newUser = await User.create({
       email,
+      username,
       password_hash,
       company_id: company_id || null
     });
@@ -145,12 +174,14 @@ const register = async (req, res) => {
     const userData = {
       id: newUser.id,
       email: newUser.email,
+      username: newUser.username,
       is_trial: newUser.is_trial,
+      subscription_plan: newUser.subscription_plan,
       trial_end_date: newUser.trial_end_date,
       is_active: newUser.is_active
     };
 
-    logger.info(`Usuario registrado: ${email}`);
+    logger.info(`Usuario registrado: ${email} (${username})`);
 
     res.status(201).json({
       success: true,
