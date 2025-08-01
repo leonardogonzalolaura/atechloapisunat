@@ -11,6 +11,7 @@ module.exports = function (app) {
   // Setup routes, middleware, and handlers
   app.use('/apisunat/swaggerUI', swaggerServe , swaggerSetup );
   app.get('/apisunat/health', health)
+  app.post('/apisunat/register', register);
   
   // Consultas oficiales (sin autenticación)
   app.get('/dni/:dni', consultarDNI);
@@ -19,5 +20,5 @@ module.exports = function (app) {
   app.use(authMiddleware);
   app.post('/apisunat/login', login);
   app.post('/apisunat/validate', verifyToken);
-  app.post('/apisunat/register', register);
+  
 }

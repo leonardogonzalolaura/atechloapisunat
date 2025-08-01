@@ -7,7 +7,8 @@ module.exports = (req, res, next) => {
   const publicRoutes = [
     { path: '/apisunat/login', method: 'POST' },
     { path: '/apisunat/validate', method: 'POST' },
-    { path: '/apisunat/swaggerUI', method: 'GET' }
+    { path: '/apisunat/swaggerUI', method: 'GET' },
+    { path: '/apisunat/register', method: 'POST' }
   ];
 
   // Verifica si la ruta actual es pública
