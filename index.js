@@ -8,6 +8,7 @@ const logger = require('./config/logger');
 const pinoHttp = require('pino-http')
 const dotenv = require('dotenv');
 const sequelize = require('./config/database');
+require('./models/associations'); // Cargar asociaciones
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;

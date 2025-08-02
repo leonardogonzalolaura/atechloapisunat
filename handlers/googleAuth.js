@@ -94,7 +94,14 @@ const googleCallback = async (req, res) => {
 
     if (!user) {
       // Crear nuevo usuario (REGISTRO)
-      const username = email.split('@')[0] + '_' + Math.random().toString(36).substr(2, 4);
+      // Usar el nombre de Google como username, sanitizado
+      let username = name 
+        ? name.toLowerCase().replace(/[^a-z0-9]/g, '') // Remover espacios y caracteres especiales
+        : email.split('@')[0]; // Fallback al email si no hay nombre
+      
+      // Agregar sufijo aleatorio para evitar duplicados
+      username = username + '_' + Math.random().toString(36).substr(2, 4);
+      
       const randomPassword = Math.random().toString(36).substr(2, 12);
       const password_hash = await bcrypt.hash(randomPassword, 10);
 
