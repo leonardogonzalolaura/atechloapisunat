@@ -8,7 +8,17 @@ module.exports = (req, res, next) => {
     { path: '/apisunat/login', method: 'POST' },
     { path: '/apisunat/validate', method: 'POST' },
     { path: '/apisunat/swaggerUI', method: 'GET' },
-    { path: '/apisunat/register', method: 'POST' }
+    { path: '/apisunat/register', method: 'POST' },
+    { path: '/apisunat/health', method: 'GET' },
+    // Google OAuth
+    { path: '/apisunat/google/login', method: 'GET' },
+    { path: '/apisunat/google/callback', method: 'GET' },
+    { path: '/apisunat/google/test', method: 'GET' },
+    // Consultas públicas
+    { path: '/dni', method: 'GET' },
+    { path: '/ruc', method: 'GET' },
+    // Email
+    { path: '/apisunat/trial-welcome', method: 'POST' }
   ];
 
   // Verifica si la ruta actual es pública
