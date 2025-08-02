@@ -90,8 +90,10 @@ const googleCallback = async (req, res) => {
       where: { email }
     });
 
+    let isNewUser = false;
+
     if (!user) {
-      // Crear nuevo usuario
+      // Crear nuevo usuario (REGISTRO)
       const username = email.split('@')[0] + '_' + Math.random().toString(36).substr(2, 4);
       const randomPassword = Math.random().toString(36).substr(2, 12);
       const password_hash = await bcrypt.hash(randomPassword, 10);
@@ -106,9 +108,10 @@ const googleCallback = async (req, res) => {
         auth_provider: 'google'
       });
 
-      logger.info(`Nuevo usuario creado via Google: ${email}`);
+      isNewUser = true;
+      logger.info(`Nuevo usuario REGISTRADO via Google: ${email}`);
     } else {
-      // Actualizar último login
+      // Actualizar último login (LOGIN)
       await user.update({ 
         last_login: new Date(),
         google_id: googleId,
@@ -117,7 +120,7 @@ const googleCallback = async (req, res) => {
         auth_provider: 'google'
       });
       
-      logger.info(`Usuario existente logueado via Google: ${email}`);
+      logger.info(`Usuario existente LOGUEADO via Google: ${email}`);
     }
 
     // Generar JWT token
@@ -131,8 +134,8 @@ const googleCallback = async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    // Redirigir al frontend con token e indicador de usuario Google
-    const frontendURL = `${process.env.FRONTEND_URL}/auth/success?token=${token}&isGoogleUser=${user.is_google_user}`;
+    // Redirigir al frontend con token, indicadores de Google y nuevo usuario
+    const frontendURL = `${process.env.FRONTEND_URL}/auth/success?token=${token}&isGoogleUser=${user.is_google_user}&isNewUser=${isNewUser}`;
     res.redirect(frontendURL);
 
   } catch (error) {
