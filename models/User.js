@@ -85,6 +85,10 @@ const User = sequelize.define('User', {
   is_google_user: {
     type: DataTypes.BOOLEAN,
     defaultValue: false
+  },
+  auth_provider: {
+    type: DataTypes.ENUM('local', 'google', 'facebook', 'github'),
+    defaultValue: 'local'
   }
 }, {
   tableName: 'users',

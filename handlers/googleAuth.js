@@ -102,7 +102,8 @@ const googleCallback = async (req, res) => {
         password_hash,
         google_id: googleId,
         profile_picture: picture,
-        is_google_user: true
+        is_google_user: true,
+        auth_provider: 'google'
       });
 
       logger.info(`Nuevo usuario creado via Google: ${email}`);
@@ -111,7 +112,9 @@ const googleCallback = async (req, res) => {
       await user.update({ 
         last_login: new Date(),
         google_id: googleId,
-        profile_picture: picture
+        profile_picture: picture,
+        is_google_user: true,
+        auth_provider: 'google'
       });
       
       logger.info(`Usuario existente logueado via Google: ${email}`);
@@ -128,8 +131,8 @@ const googleCallback = async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    // Redirigir al frontend con token
-    const frontendURL = `${process.env.FRONTEND_URL}/auth/success?token=${token}`;
+    // Redirigir al frontend con token e indicador de usuario Google
+    const frontendURL = `${process.env.FRONTEND_URL}/auth/success?token=${token}&isGoogleUser=${user.is_google_user}`;
     res.redirect(frontendURL);
 
   } catch (error) {

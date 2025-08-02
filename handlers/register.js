@@ -167,7 +167,8 @@ const register = async (req, res) => {
       email,
       username,
       password_hash,
-      company_id: company_id || null
+      company_id: company_id || null,
+      auth_provider: 'local'
     });
 
     // Respuesta exitosa (sin incluir password_hash)
