@@ -83,7 +83,7 @@ const logger = require('../config/logger');
 const getUserProfile = async (req, res) => {
   try {
     const userId = req.user.id;
-
+    logger.info(`Obteniendo perfil del usuario con ID: ${userId}`);
     // Obtener usuario con empresas asociadas
     const user = await User.findByPk(userId, {
       include: [{
@@ -142,7 +142,7 @@ const getUserProfile = async (req, res) => {
     });
 
   } catch (error) {
-    logger.error('Error obteniendo perfil de usuario:', error.message);
+    logger.error('Error obteniendo perfil de usuario:', error);
     res.status(500).json({
       success: false,
       message: 'Error interno del servidor'

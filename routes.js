@@ -29,12 +29,12 @@ module.exports = function (app) {
   app.get('/apisunat/google/test', testGoogleAuth);
   
  
-  // User profile and companies (requieren autenticación)
-  app.get('/apisunat/user/profile', getUserProfile);
-  app.post('/apisunat/user/companies', registerCompany);
+  
 
   app.use(authMiddleware);
   app.post('/apisunat/login', login);
   app.post('/apisunat/validate', verifyToken);
-  
+  // User profile and companies (requieren autenticación)
+  app.get('/apisunat/user/profile', getUserProfile);
+  app.post('/apisunat/user/companies', registerCompany);
 }
