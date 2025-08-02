@@ -5,6 +5,7 @@ const { login, verifyToken } = require('./handlers/security')
 const register = require('./handlers/register')
 const { consultarDNI } = require('./handlers/dni')
 const { consultarRUC } = require('./handlers/ruc')
+const { sendTrialWelcomeEmail } = require('./handlers/email')
 const { swaggerServe, swaggerSetup } = require('./middleware/swagger_doc');
 
 module.exports = function (app) {
@@ -16,6 +17,9 @@ module.exports = function (app) {
   // Consultas oficiales (sin autenticación)
   app.get('/dni/:dni', consultarDNI);
   app.get('/ruc/:ruc', consultarRUC);
+  
+  // Email services
+  app.post('/apisunat/trial-welcome', sendTrialWelcomeEmail);
   
   app.use(authMiddleware);
   app.post('/apisunat/login', login);
