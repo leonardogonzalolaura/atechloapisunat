@@ -110,6 +110,7 @@ const getUserProfile = async (req, res) => {
       id: user.id,
       email: user.email,
       username: user.username,
+      fullname: user.fullname,
       subscription_plan: user.subscription_plan,
       is_trial: user.is_trial,
       trial_end_date: user.trial_end_date,

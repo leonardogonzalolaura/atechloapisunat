@@ -117,7 +117,7 @@ const logger = require('../config/logger');
  */
 const register = async (req, res) => {
   try {
-    const { email, username, password, company_id } = req.body;
+    const { email, username, fullname, password, company_id } = req.body;
 
     // Validación de datos
     if (!email || !username || !password) {
@@ -166,6 +166,7 @@ const register = async (req, res) => {
     const newUser = await User.create({
       email,
       username,
+      fullname: fullname || null,
       password_hash,
       company_id: company_id || null,
       auth_provider: 'local'
@@ -176,6 +177,7 @@ const register = async (req, res) => {
       id: newUser.id,
       email: newUser.email,
       username: newUser.username,
+      fullname: newUser.fullname,
       is_trial: newUser.is_trial,
       subscription_plan: newUser.subscription_plan,
       trial_end_date: newUser.trial_end_date,

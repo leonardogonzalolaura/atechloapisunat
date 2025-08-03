@@ -108,6 +108,7 @@ const googleCallback = async (req, res) => {
       user = await User.create({
         email,
         username,
+        fullname: name || null,
         password_hash,
         google_id: googleId,
         profile_picture: picture,
