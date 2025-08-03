@@ -7,7 +7,8 @@ const { consultarDNI } = require('./handlers/dni')
 const { consultarRUC } = require('./handlers/ruc')
 const { sendTrialWelcomeEmail } = require('./handlers/email')
 const { googleLogin, googleCallback, testGoogleAuth } = require('./handlers/googleAuth')
-const { getUserProfile, registerCompany } = require('./handlers/userProfile')
+const { getUserProfile, registerCompany, updateCompany } = require('./handlers/userProfile')
+const { getCompanySequences, createSequence, getNextNumber } = require('./handlers/documentSequence')
 const { swaggerServe, swaggerSetup } = require('./middleware/swagger_doc');
 
 module.exports = function (app) {
@@ -37,4 +38,10 @@ module.exports = function (app) {
   // User profile and companies (requieren autenticación)
   app.get('/apisunat/user/profile', getUserProfile);
   app.post('/apisunat/user/companies', registerCompany);
+  app.put('/apisunat/user/companies/:id', updateCompany);
+  
+  // Document sequences (correlativos)
+  app.get('/apisunat/companies/:companyId/sequences', getCompanySequences);
+  app.post('/apisunat/companies/:companyId/sequences', createSequence);
+  app.post('/apisunat/companies/:companyId/sequences/next', getNextNumber);
 }

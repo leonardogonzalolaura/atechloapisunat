@@ -60,7 +60,7 @@ const logger = require('../config/logger');
  *                           id:
  *                             type: integer
  *                             example: 1
- *                           rut:
+ *                           ruc:
  *                             type: string
  *                             example: "20123456789"
  *                           name:
@@ -124,10 +124,19 @@ const getUserProfile = async (req, res) => {
     // Formatear empresas con rol
     const companies = user.companies.map(company => ({
       id: company.id,
-      rut: company.rut,
+      ruc: company.rut,
       name: company.name,
+      business_name: company.business_name,
+      legal_representative: company.legal_representative,
       phone: company.phone,
+      email: company.email,
+      website: company.website,
       address: company.address,
+      industry: company.industry,
+      tax_regime: company.tax_regime,
+      currency: company.currency,
+      logo_url: company.logo_url,
+      is_active: company.is_active,
       role: company.UserCompany.role, // Rol del usuario en esta empresa
       created_at: company.created_at
     }));
@@ -175,12 +184,44 @@ const getUserProfile = async (req, res) => {
  *               name:
  *                 type: string
  *                 example: "Mi Empresa SAC"
+ *               business_name:
+ *                 type: string
+ *                 example: "Mi Empresa Sociedad Anónima Cerrada"
+ *               legal_representative:
+ *                 type: string
+ *                 example: "Juan Pérez López"
  *               phone:
  *                 type: string
  *                 example: "+51 999 888 777"
+ *               email:
+ *                 type: string
+ *                 example: "contacto@miempresa.com"
+ *               website:
+ *                 type: string
+ *                 example: "https://miempresa.com"
  *               address:
  *                 type: string
  *                 example: "Av. Principal 123, Lima"
+ *               industry:
+ *                 type: string
+ *                 example: "Tecnología"
+ *               tax_regime:
+ *                 type: string
+ *                 enum: [general, simplified, special]
+ *                 example: "general"
+ *               currency:
+ *                 type: string
+ *                 enum: [PEN, USD, EUR]
+ *                 example: "PEN"
+ *               logo_url:
+ *                 type: string
+ *                 example: "https://miempresa.com/logo.png"
+ *               sunat_user:
+ *                 type: string
+ *                 example: "20123456789MODDATOS"
+ *               sunat_password:
+ *                 type: string
+ *                 example: "mipasswordsunat"
  *               role:
  *                 type: string
  *                 enum: [owner, admin, accountant, sales]
@@ -228,10 +269,14 @@ const getUserProfile = async (req, res) => {
 const registerCompany = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { rut, name, phone, address, role = 'owner' } = req.body;
+    const { 
+      ruc, name, business_name, legal_representative, phone, email, website, 
+      address, industry, tax_regime, currency, logo_url, sunat_user, sunat_password, 
+      role = 'owner' 
+    } = req.body;
 
     // Validaciones
-    if (!rut || !name) {
+    if (!ruc || !name) {
       return res.status(400).json({
         success: false,
         message: 'RUT y nombre son requeridos'
@@ -249,10 +294,20 @@ const registerCompany = async (req, res) => {
 
     // Crear empresa
     const company = await Company.create({
-      rut,
+      ruc,
       name,
+      business_name,
+      legal_representative,
       phone,
-      address
+      email,
+      website,
+      address,
+      industry,
+      tax_regime,
+      currency,
+      logo_url,
+      sunat_user,
+      sunat_password
     });
 
     // Asignar usuario a la empresa
@@ -272,8 +327,17 @@ const registerCompany = async (req, res) => {
           id: company.id,
           rut: company.rut,
           name: company.name,
+          business_name: company.business_name,
+          legal_representative: company.legal_representative,
           phone: company.phone,
-          address: company.address
+          email: company.email,
+          website: company.website,
+          address: company.address,
+          industry: company.industry,
+          tax_regime: company.tax_regime,
+          currency: company.currency,
+          logo_url: company.logo_url,
+          is_active: company.is_active
         },
         role
       }
@@ -296,7 +360,178 @@ const registerCompany = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /apisunat/user/companies/{id}:
+ *   put:
+ *     summary: Actualizar empresa
+ *     description: Actualiza los datos de una empresa del usuario
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la empresa
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Mi Empresa SAC"
+ *               business_name:
+ *                 type: string
+ *                 example: "Mi Empresa Sociedad Anónima Cerrada"
+ *               rut:
+ *                 type: string
+ *                 example: "20123456789"
+ *               legal_representative:
+ *                 type: string
+ *                 example: "Juan Pérez López"
+ *               phone:
+ *                 type: string
+ *                 example: "+51 999 888 777"
+ *               email:
+ *                 type: string
+ *                 example: "contacto@miempresa.com"
+ *               website:
+ *                 type: string
+ *                 example: "https://miempresa.com"
+ *               address:
+ *                 type: string
+ *                 example: "Av. Principal 123, Lima"
+ *               industry:
+ *                 type: string
+ *                 example: "Tecnología"
+ *               tax_regime:
+ *                 type: string
+ *                 enum: [general, simplified, special]
+ *                 example: "general"
+ *               currency:
+ *                 type: string
+ *                 enum: [PEN, USD, EUR]
+ *                 example: "PEN"
+ *               logo_url:
+ *                 type: string
+ *                 example: "https://miempresa.com/logo.png"
+ *               sunat_user:
+ *                 type: string
+ *                 example: "20123456789MODDATOS"
+ *               sunat_password:
+ *                 type: string
+ *                 example: "mipasswordsunat"
+ *     responses:
+ *       200:
+ *         description: Empresa actualizada exitosamente
+ *       400:
+ *         description: Datos inválidos
+ *       403:
+ *         description: Sin permisos para actualizar esta empresa
+ *       404:
+ *         description: Empresa no encontrada
+ *       500:
+ *         description: Error interno del servidor
+ */
+const updateCompany = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const companyId = req.params.id;
+    const updateData = req.body;
+
+    // Verificar que el usuario tenga permisos sobre la empresa
+    const userCompany = await UserCompany.findOne({
+      where: {
+        user_id: userId,
+        company_id: companyId,
+        role: ['owner', 'admin'] // Solo owner y admin pueden actualizar
+      }
+    });
+
+    if (!userCompany) {
+      return res.status(403).json({
+        success: false,
+        message: 'No tienes permisos para actualizar esta empresa'
+      });
+    }
+
+    // Buscar la empresa
+    const company = await Company.findByPk(companyId);
+    if (!company) {
+      return res.status(404).json({
+        success: false,
+        message: 'Empresa no encontrada'
+      });
+    }
+
+    // Si se está actualizando el RUT, verificar que no exista
+    if (updateData.rut && updateData.rut !== company.rut) {
+      const existingCompany = await Company.findOne({ 
+        where: { 
+          rut: updateData.rut,
+          id: { [Op.ne]: companyId } // Excluir la empresa actual
+        } 
+      });
+      
+      if (existingCompany) {
+        return res.status(409).json({
+          success: false,
+          message: 'El RUT ya está registrado por otra empresa'
+        });
+      }
+    }
+
+    // Actualizar empresa
+    await company.update(updateData);
+
+    logger.info(`Empresa actualizada: ${company.name} (ID: ${companyId}) por usuario: ${userId}`);
+
+    res.json({
+      success: true,
+      message: 'Empresa actualizada exitosamente',
+      data: {
+        id: company.id,
+        rut: company.rut,
+        name: company.name,
+        business_name: company.business_name,
+        legal_representative: company.legal_representative,
+        phone: company.phone,
+        email: company.email,
+        website: company.website,
+        address: company.address,
+        industry: company.industry,
+        tax_regime: company.tax_regime,
+        currency: company.currency,
+        logo_url: company.logo_url,
+        is_active: company.is_active,
+        updated_at: company.updated_at
+      }
+    });
+
+  } catch (error) {
+    logger.error('Error actualizando empresa:', error.message);
+    
+    if (error.name === 'SequelizeValidationError') {
+      return res.status(400).json({
+        success: false,
+        message: 'Datos inválidos: ' + error.errors.map(e => e.message).join(', ')
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor'
+    });
+  }
+};
+
 module.exports = {
   getUserProfile,
-  registerCompany
+  registerCompany,
+  updateCompany
 };

@@ -9,7 +9,7 @@ const Company = sequelize.define('Company', {
     primaryKey: true,
     autoIncrement: true
   },
-  rut: {
+  ruc: {
     type: DataTypes.STRING(20),
     allowNull: false,
     unique: true
@@ -24,6 +24,53 @@ const Company = sequelize.define('Company', {
   },
   address: {
     type: DataTypes.TEXT,
+    allowNull: true
+  },
+  business_name: {
+    type: DataTypes.STRING(150),
+    allowNull: true
+  },
+  legal_representative: {
+    type: DataTypes.STRING(100),
+    allowNull: true
+  },
+  email: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    validate: {
+      isEmail: true
+    }
+  },
+  website: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
+  industry: {
+    type: DataTypes.STRING(100),
+    allowNull: true
+  },
+  tax_regime: {
+    type: DataTypes.ENUM('general', 'simplified', 'special'),
+    defaultValue: 'general'
+  },
+  currency: {
+    type: DataTypes.ENUM('PEN', 'USD', 'EUR'),
+    defaultValue: 'PEN'
+  },
+  logo_url: {
+    type: DataTypes.STRING(500),
+    allowNull: true
+  },
+  is_active: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
+  sunat_user: {
+    type: DataTypes.STRING(50),
+    allowNull: true
+  },
+  sunat_password: {
+    type: DataTypes.STRING(255),
     allowNull: true
   }
 }, {
