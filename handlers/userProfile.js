@@ -325,7 +325,7 @@ const registerCompany = async (req, res) => {
       data: {
         company: {
           id: company.id,
-          rut: company.rut,
+          ruc: company.ruc,
           name: company.name,
           business_name: company.business_name,
           legal_representative: company.legal_representative,
