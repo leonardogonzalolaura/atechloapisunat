@@ -11,6 +11,7 @@ const { getUserProfile, updateUserProfile, registerCompany, updateCompany } = re
 const { getCompanySequences, createSequence, getNextNumber } = require('./handlers/documentSequence')
 const { getProducts, createProduct, updateProduct, deleteProduct } = require('./handlers/products')
 const { getCustomers, createCustomer, updateCustomer, deleteCustomer } = require('./handlers/customers')
+const { getNotificationSettings, updateNotificationSettings, getNotifications, createNotification, markAsRead, markAllAsRead, deleteNotification } = require('./handlers/notifications')
 const { swaggerServe, swaggerSetup } = require('./middleware/swagger_doc');
 
 module.exports = function (app) {
@@ -59,4 +60,13 @@ module.exports = function (app) {
   app.post('/apisunat/companies/:companyId/customers', createCustomer);
   app.put('/apisunat/companies/:companyId/customers/:id', updateCustomer);
   app.delete('/apisunat/companies/:companyId/customers/:id', deleteCustomer);
+  
+  // Notifications
+  app.get('/apisunat/user/notification-settings', getNotificationSettings);
+  app.put('/apisunat/user/notification-settings', updateNotificationSettings);
+  app.get('/apisunat/user/notifications', getNotifications);
+  app.post('/apisunat/user/notifications', createNotification);
+  app.put('/apisunat/user/notifications/:notificationId/read', markAsRead);
+  app.put('/apisunat/user/notifications/mark-all-read', markAllAsRead);
+  app.delete('/apisunat/user/notifications/:notificationId', deleteNotification);
 }

@@ -6,6 +6,8 @@ const UserCompany = require('./UserCompany');
 const DocumentSequence = require('./DocumentSequence');
 const Product = require('./Product');
 const Customer = require('./Customer');
+const UserNotificationSettings = require('./UserNotificationSettings');
+const UserNotification = require('./UserNotification');
 
 // Definir asociaciones many-to-many entre User y Company
 User.belongsToMany(Company, {
@@ -40,11 +42,23 @@ Product.belongsTo(Company, { foreignKey: 'company_id', as: 'company' });
 Company.hasMany(Customer, { foreignKey: 'company_id', as: 'customers' });
 Customer.belongsTo(Company, { foreignKey: 'company_id', as: 'company' });
 
+// Asociaciones para Notifications
+User.hasOne(UserNotificationSettings, { foreignKey: 'user_id', as: 'notificationSettings' });
+UserNotificationSettings.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+
+User.hasMany(UserNotification, { foreignKey: 'user_id', as: 'notifications' });
+UserNotification.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
+
+Company.hasMany(UserNotification, { foreignKey: 'company_id', as: 'notifications' });
+UserNotification.belongsTo(Company, { foreignKey: 'company_id', as: 'company' });
+
 module.exports = {
   User,
   Company,
   UserCompany,
   DocumentSequence,
   Product,
-  Customer
+  Customer,
+  UserNotificationSettings,
+  UserNotification
 };
