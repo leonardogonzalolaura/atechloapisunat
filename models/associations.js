@@ -8,6 +8,8 @@ const Product = require('./Product');
 const Customer = require('./Customer');
 const UserNotificationSettings = require('./UserNotificationSettings');
 const UserNotification = require('./UserNotification');
+const Invoice = require('./Invoice');
+const InvoiceItem = require('./InvoiceItem');
 
 // Definir asociaciones many-to-many entre User y Company
 User.belongsToMany(Company, {
@@ -52,6 +54,23 @@ UserNotification.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 Company.hasMany(UserNotification, { foreignKey: 'company_id', as: 'notifications' });
 UserNotification.belongsTo(Company, { foreignKey: 'company_id', as: 'company' });
 
+// Asociaciones para Invoice
+Company.hasMany(Invoice, { foreignKey: 'company_id', as: 'invoices' });
+Invoice.belongsTo(Company, { foreignKey: 'company_id', as: 'company' });
+
+Customer.hasMany(Invoice, { foreignKey: 'customer_id', as: 'invoices' });
+Invoice.belongsTo(Customer, { foreignKey: 'customer_id', as: 'customer' });
+
+User.hasMany(Invoice, { foreignKey: 'created_by', as: 'createdInvoices' });
+Invoice.belongsTo(User, { foreignKey: 'created_by', as: 'creator' });
+
+// Asociaciones para InvoiceItem
+Invoice.hasMany(InvoiceItem, { foreignKey: 'invoice_id', as: 'items' });
+InvoiceItem.belongsTo(Invoice, { foreignKey: 'invoice_id', as: 'invoice' });
+
+Product.hasMany(InvoiceItem, { foreignKey: 'product_id', as: 'invoiceItems' });
+InvoiceItem.belongsTo(Product, { foreignKey: 'product_id', as: 'product' });
+
 module.exports = {
   User,
   Company,
@@ -60,5 +79,7 @@ module.exports = {
   Product,
   Customer,
   UserNotificationSettings,
-  UserNotification
+  UserNotification,
+  Invoice,
+  InvoiceItem
 };

@@ -39,6 +39,22 @@ const swaggerOptions = {
         description: 'Servicios de correo electrónico'
       },
       {
+        name: 'Facturas',
+        description: 'Gestión de facturas y documentos'
+      },
+      {
+        name: 'Integración SUNAT',
+        description: 'Envío y validación con SUNAT'
+      },
+      {
+        name: 'Notificaciones',
+        description: 'Sistema de notificaciones de usuario'
+      },
+      {
+        name: 'Clientes',
+        description: 'Gestión de clientes'
+      },
+      {
         name: 'Sistema',
         description: 'Endpoints de salud y configuración'
       }

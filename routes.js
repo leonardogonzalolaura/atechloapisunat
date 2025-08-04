@@ -12,6 +12,8 @@ const { getCompanySequences, createSequence, getNextNumber } = require('./handle
 const { getProducts, createProduct, updateProduct, deleteProduct } = require('./handlers/products')
 const { getCustomers, createCustomer, updateCustomer, deleteCustomer } = require('./handlers/customers')
 const { getNotificationSettings, updateNotificationSettings, getNotifications, createNotification, markAsRead, markAllAsRead, deleteNotification } = require('./handlers/notifications')
+const { getInvoices, createInvoice, getInvoiceById } = require('./handlers/invoices')
+const { generateXML, sendToSunat, getSunatStatus, downloadPDF } = require('./handlers/sunatIntegration')
 const { swaggerServe, swaggerSetup } = require('./middleware/swagger_doc');
 
 module.exports = function (app) {
@@ -69,4 +71,15 @@ module.exports = function (app) {
   app.put('/apisunat/user/notifications/:notificationId/read', markAsRead);
   app.put('/apisunat/user/notifications/mark-all-read', markAllAsRead);
   app.delete('/apisunat/user/notifications/:notificationId', deleteNotification);
+  
+  // Invoices
+  app.get('/apisunat/companies/:companyId/invoices', getInvoices);
+  app.post('/apisunat/companies/:companyId/invoices', createInvoice);
+  app.get('/apisunat/companies/:companyId/invoices/:id', getInvoiceById);
+  
+  // SUNAT Integration
+  app.post('/apisunat/companies/:companyId/invoices/:invoiceId/generate-xml', generateXML);
+  app.post('/apisunat/companies/:companyId/invoices/:invoiceId/send-sunat', sendToSunat);
+  app.get('/apisunat/companies/:companyId/invoices/:invoiceId/sunat-status', getSunatStatus);
+  app.get('/apisunat/companies/:companyId/invoices/:invoiceId/download-pdf', downloadPDF);
 }
