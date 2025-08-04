@@ -9,6 +9,7 @@ const { sendTrialWelcomeEmail } = require('./handlers/email')
 const { googleLogin, googleCallback, testGoogleAuth } = require('./handlers/googleAuth')
 const { getUserProfile, updateUserProfile, registerCompany, updateCompany } = require('./handlers/userProfile')
 const { getCompanySequences, createSequence, getNextNumber } = require('./handlers/documentSequence')
+const { getProducts, createProduct, updateProduct, deleteProduct } = require('./handlers/products')
 const { swaggerServe, swaggerSetup } = require('./middleware/swagger_doc');
 
 module.exports = function (app) {
@@ -45,4 +46,10 @@ module.exports = function (app) {
   app.get('/apisunat/companies/:companyId/sequences', getCompanySequences);
   app.post('/apisunat/companies/:companyId/sequences', createSequence);
   app.post('/apisunat/companies/:companyId/sequences/next', getNextNumber);
+  
+  // Products
+  app.get('/apisunat/companies/:companyId/products', getProducts);
+  app.post('/apisunat/companies/:companyId/products', createProduct);
+  app.put('/apisunat/companies/:companyId/products/:id', updateProduct);
+  app.delete('/apisunat/companies/:companyId/products/:id', deleteProduct);
 }
