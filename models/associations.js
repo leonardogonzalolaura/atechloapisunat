@@ -5,6 +5,7 @@ const Company = require('./Company');
 const UserCompany = require('./UserCompany');
 const DocumentSequence = require('./DocumentSequence');
 const Product = require('./Product');
+const Customer = require('./Customer');
 
 // Definir asociaciones many-to-many entre User y Company
 User.belongsToMany(Company, {
@@ -35,10 +36,15 @@ DocumentSequence.belongsTo(Company, { foreignKey: 'company_id', as: 'company' })
 Company.hasMany(Product, { foreignKey: 'company_id', as: 'products' });
 Product.belongsTo(Company, { foreignKey: 'company_id', as: 'company' });
 
+// Asociaciones para Customer
+Company.hasMany(Customer, { foreignKey: 'company_id', as: 'customers' });
+Customer.belongsTo(Company, { foreignKey: 'company_id', as: 'company' });
+
 module.exports = {
   User,
   Company,
   UserCompany,
   DocumentSequence,
-  Product
+  Product,
+  Customer
 };

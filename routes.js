@@ -10,6 +10,7 @@ const { googleLogin, googleCallback, testGoogleAuth } = require('./handlers/goog
 const { getUserProfile, updateUserProfile, registerCompany, updateCompany } = require('./handlers/userProfile')
 const { getCompanySequences, createSequence, getNextNumber } = require('./handlers/documentSequence')
 const { getProducts, createProduct, updateProduct, deleteProduct } = require('./handlers/products')
+const { getCustomers, createCustomer, updateCustomer, deleteCustomer } = require('./handlers/customers')
 const { swaggerServe, swaggerSetup } = require('./middleware/swagger_doc');
 
 module.exports = function (app) {
@@ -52,4 +53,10 @@ module.exports = function (app) {
   app.post('/apisunat/companies/:companyId/products', createProduct);
   app.put('/apisunat/companies/:companyId/products/:id', updateProduct);
   app.delete('/apisunat/companies/:companyId/products/:id', deleteProduct);
+  
+  // Customers
+  app.get('/apisunat/companies/:companyId/customers', getCustomers);
+  app.post('/apisunat/companies/:companyId/customers', createCustomer);
+  app.put('/apisunat/companies/:companyId/customers/:id', updateCustomer);
+  app.delete('/apisunat/companies/:companyId/customers/:id', deleteCustomer);
 }
