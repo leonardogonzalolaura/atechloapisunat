@@ -7,6 +7,7 @@ const logger = require('../config/logger');
  * @swagger
  * /dni/{dni}:
  *   get:
+ *     tags: [Consultas Públicas]
  *     summary: Consultar DNI
  *     description: Consulta información de una persona por su DNI en RENIEC
  *     security: []

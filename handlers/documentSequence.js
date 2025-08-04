@@ -7,6 +7,7 @@ const logger = require('../config/logger');
  * @swagger
  * /apisunat/companies/{companyId}/sequences:
  *   get:
+ *     tags: [Correlativos]
  *     summary: Obtener correlativos de empresa
  *     description: Obtiene todos los correlativos de documentos de una empresa
  *     security:
@@ -67,6 +68,7 @@ const getCompanySequences = async (req, res) => {
  * @swagger
  * /apisunat/companies/{companyId}/sequences:
  *   post:
+ *     tags: [Correlativos]
  *     summary: Crear correlativo
  *     description: Crea un nuevo correlativo para una empresa
  *     security:
@@ -178,6 +180,7 @@ const createSequence = async (req, res) => {
  * @swagger
  * /apisunat/companies/{companyId}/sequences/next:
  *   post:
+ *     tags: [Correlativos]
  *     summary: Obtener siguiente número
  *     description: Obtiene y actualiza el siguiente número de una serie
  *     security:

@@ -9,8 +9,9 @@ const logger = require('../config/logger');
 
 /**
  * @swagger
- * /apisunat/google/login:
+ * /auth/google/login:
  *   get:
+ *     tags: [Autenticación]
  *     summary: Iniciar OAuth con Google
  *     description: Redirige al usuario a Google para autenticación
  *     security: []
@@ -34,8 +35,9 @@ const googleLogin = (req, res) => {
 
 /**
  * @swagger
- * /apisunat/google/callback:
+ * /auth/google/callback:
  *   get:
+ *     tags: [Autenticación]
  *     summary: Callback de Google OAuth
  *     description: Procesa el código de autorización de Google
  *     security: []
@@ -156,8 +158,9 @@ const googleCallback = async (req, res) => {
 
 /**
  * @swagger
- * /apisunat/google/test:
+ * /auth/google/test:
  *   get:
+ *     tags: [Autenticación]
  *     summary: Probar autenticación Google
  *     description: Endpoint para probar la funcionalidad OAuth
  *     security: []

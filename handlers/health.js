@@ -2,6 +2,7 @@
  * @swagger
  * /apisunat/health:
  *   get:
+ *     tags: [Sistema]
  *     summary: Health check
  *     description: Check the health of the API
  *     security: [] 

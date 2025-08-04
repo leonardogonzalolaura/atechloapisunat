@@ -5,10 +5,44 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API de Sunat',
+      title: 'API de Facturación Electrónica SUNAT',
       version: '1.0.0',
-      description: 'Documentación de la API de servicios de ATECHLO',
+      description: 'API completa para sistema de facturación electrónica con integración SUNAT',
     },
+    tags: [
+      {
+        name: 'Autenticación',
+        description: 'Endpoints de registro, login y OAuth'
+      },
+      {
+        name: 'Usuarios',
+        description: 'Gestión de perfiles de usuario'
+      },
+      {
+        name: 'Empresas',
+        description: 'Gestión de empresas y configuración'
+      },
+      {
+        name: 'Productos',
+        description: 'Gestión de productos y servicios'
+      },
+      {
+        name: 'Correlativos',
+        description: 'Gestión de numeración de documentos'
+      },
+      {
+        name: 'Consultas Públicas',
+        description: 'Consultas a APIs oficiales (DNI, RUC)'
+      },
+      {
+        name: 'Email',
+        description: 'Servicios de correo electrónico'
+      },
+      {
+        name: 'Sistema',
+        description: 'Endpoints de salud y configuración'
+      }
+    ],
     components: {
       securitySchemes: {
         ApiKeyAuth: {

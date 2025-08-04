@@ -7,6 +7,7 @@ const logger = require('../config/logger');
  * @swagger
  * /email/trial-welcome:
  *   post:
+ *     tags: [Email]
  *     summary: Enviar email de bienvenida trial
  *     description: Envía un correo de bienvenida para usuarios en período de prueba
  *     security: []

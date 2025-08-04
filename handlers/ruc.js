@@ -7,6 +7,7 @@ const logger = require('../config/logger');
  * @swagger
  * /ruc/{ruc}:
  *   get:
+ *     tags: [Consultas Públicas]
  *     summary: Consultar RUC
  *     description: Consulta información de una empresa por su RUC en SUNAT
  *     security: []

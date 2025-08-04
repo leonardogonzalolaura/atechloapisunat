@@ -9,6 +9,7 @@ const logger = require('../config/logger');
  * @swagger
  * /apisunat/register:
  *   post:
+ *     tags: [Autenticación]
  *     summary: Registrar usuario
  *     description: Registra un nuevo usuario en la base de datos
  *     security: []

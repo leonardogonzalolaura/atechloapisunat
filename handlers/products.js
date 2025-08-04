@@ -8,8 +8,9 @@ const logger = require('../config/logger');
  * @swagger
  * /apisunat/companies/{companyId}/products:
  *   get:
+ *     tags: [Productos]
  *     summary: Listar productos de empresa
- *     description: Obtiene todos los productos de una empresa
+ *     description: Obtiene todos los productos y servicios de una empresa
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -108,8 +109,9 @@ const getProducts = async (req, res) => {
  * @swagger
  * /apisunat/companies/{companyId}/products:
  *   post:
- *     summary: Crear producto
- *     description: Crea un nuevo producto para la empresa
+ *     tags: [Productos]
+ *     summary: Crear producto o servicio
+ *     description: Crea un nuevo producto o servicio para la empresa
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -265,8 +267,9 @@ const createProduct = async (req, res) => {
  * @swagger
  * /apisunat/companies/{companyId}/products/{id}:
  *   put:
- *     summary: Actualizar producto
- *     description: Actualiza un producto existente
+ *     tags: [Productos]
+ *     summary: Actualizar producto o servicio
+ *     description: Actualiza un producto o servicio existente
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -368,8 +371,9 @@ const updateProduct = async (req, res) => {
  * @swagger
  * /apisunat/companies/{companyId}/products/{id}:
  *   delete:
- *     summary: Eliminar producto
- *     description: Desactiva un producto (soft delete)
+ *     tags: [Productos]
+ *     summary: Eliminar producto o servicio
+ *     description: Desactiva un producto o servicio (soft delete)
  *     security:
  *       - BearerAuth: []
  *     parameters:

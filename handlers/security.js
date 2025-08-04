@@ -8,6 +8,7 @@ const logger = require('../config/logger');
  * @swagger
  * /apisunat/login:
  *   post:
+ *     tags: [Autenticación]
  *     summary: Iniciar sesión
  *     description: Inicia sesión con email/username y contraseña
  *     security: [] 
@@ -204,6 +205,7 @@ const login = async (req, res) => {
  * @swagger
  * /apisunat/validate:
  *   post:
+ *     tags: [Autenticación]
  *     summary: Verificar token
  *     description: Verifica el token proporcionado
  *     security: []

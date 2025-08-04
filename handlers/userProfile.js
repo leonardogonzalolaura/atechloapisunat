@@ -8,6 +8,7 @@ const logger = require('../config/logger');
  * @swagger
  * /apisunat/user/profile:
  *   get:
+ *     tags: [Usuarios]
  *     summary: Obtener perfil completo del usuario
  *     description: Obtiene información completa del usuario incluyendo empresas asignadas
  *     security:
@@ -165,6 +166,7 @@ const getUserProfile = async (req, res) => {
  * @swagger
  * /apisunat/user/companies:
  *   post:
+ *     tags: [Empresas]
  *     summary: Registrar empresa para el usuario
  *     description: Registra una nueva empresa y la asigna al usuario actual
  *     security:
@@ -365,6 +367,7 @@ const registerCompany = async (req, res) => {
  * @swagger
  * /apisunat/user/companies/{id}:
  *   put:
+ *     tags: [Empresas]
  *     summary: Actualizar empresa
  *     description: Actualiza los datos de una empresa del usuario
  *     security:
@@ -535,6 +538,7 @@ const updateCompany = async (req, res) => {
  * @swagger
  * /apisunat/user/profile:
  *   put:
+ *     tags: [Usuarios]
  *     summary: Actualizar perfil del usuario
  *     description: Actualiza la información personal del usuario
  *     security:
