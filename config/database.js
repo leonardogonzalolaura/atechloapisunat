@@ -2,13 +2,16 @@
 
 const { Sequelize } = require('sequelize');
 const logger = require('./logger');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME || 'atechlo_einvoice',
-  process.env.DB_USER || 'atechlo_admin', 
+  process.env.DB_NAME || "atechlo_einvoice",
+  process.env.DB_USER || "atechlo_admin", 
   process.env.DB_PASSWORD || '',
   {
-    host: process.env.DB_HOST || 'localhost',
+    host: process.env.DB_HOST || '198.251.89.30',
     port: process.env.DB_PORT || 3306,
     dialect: 'mysql',
     logging: false, // Desactivar logging SQL para producción
@@ -51,6 +54,8 @@ const sequelize = new Sequelize(
     }
   }
 );
+logger.info('Conectando a base de datos...');
+
 
 // Monitoreo de conexiones
 setInterval(async () => {

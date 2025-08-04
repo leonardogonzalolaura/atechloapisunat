@@ -1,5 +1,6 @@
 'use strict'
 
+const { Op } = require('sequelize');
 const { User, Company, UserCompany } = require('../models/associations');
 const logger = require('../config/logger');
 
@@ -470,7 +471,7 @@ const updateCompany = async (req, res) => {
     }
 
     // Si se está actualizando el RUT, verificar que no exista
-    if (updateData.rut && updateData.rut !== company.rut) {
+    if (updateData.ruc && updateData.ruc !== company.ruc) {
       const existingCompany = await Company.findOne({ 
         where: { 
           rut: updateData.rut,
@@ -530,8 +531,179 @@ const updateCompany = async (req, res) => {
   }
 };
 
+/**
+ * @swagger
+ * /apisunat/user/profile:
+ *   put:
+ *     summary: Actualizar perfil del usuario
+ *     description: Actualiza la información personal del usuario
+ *     security:
+ *       - BearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 50
+ *                 example: "nuevousuario123"
+ *               fullname:
+ *                 type: string
+ *                 maxLength: 255
+ *                 example: "Juan Carlos Pérez"
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "nuevo@email.com"
+ *               profile_picture:
+ *                 type: string
+ *                 example: "https://ejemplo.com/foto.jpg"
+ *     responses:
+ *       200:
+ *         description: Perfil actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Perfil actualizado exitosamente"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     email:
+ *                       type: string
+ *                       example: "nuevo@email.com"
+ *                     username:
+ *                       type: string
+ *                       example: "nuevousuario123"
+ *                     fullname:
+ *                       type: string
+ *                       example: "Juan Carlos Pérez"
+ *       400:
+ *         description: Datos inválidos
+ *       409:
+ *         description: Email o username ya existe
+ *       500:
+ *         description: Error interno del servidor
+ */
+const updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { username, fullname, email, profile_picture } = req.body;
+
+    // Buscar usuario actual
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'Usuario no encontrado'
+      });
+    }
+
+    // Validar username si se está actualizando
+    if (username && username !== user.username) {
+      if (username.length < 3 || username.length > 50) {
+        return res.status(400).json({
+          success: false,
+          message: 'El username debe tener entre 3 y 50 caracteres'
+        });
+      }
+
+      // Verificar que el username no exista
+      const existingUser = await User.findOne({ 
+        where: { 
+          username,
+          id: { [Op.ne]: userId }
+        } 
+      });
+      
+      if (existingUser) {
+        return res.status(409).json({
+          success: false,
+          message: 'El username ya está en uso'
+        });
+      }
+    }
+
+    // Validar email si se está actualizando
+    if (email && email !== user.email) {
+      const existingUser = await User.findOne({ 
+        where: { 
+          email,
+          id: { [Op.ne]: userId }
+        } 
+      });
+      
+      if (existingUser) {
+        return res.status(409).json({
+          success: false,
+          message: 'El email ya está en uso'
+        });
+      }
+    }
+
+    // Actualizar usuario
+    const updateData = {};
+    if (username !== undefined) updateData.username = username;
+    if (fullname !== undefined) updateData.fullname = fullname;
+    if (email !== undefined) updateData.email = email;
+    if (profile_picture !== undefined) updateData.profile_picture = profile_picture;
+
+    await user.update(updateData);
+
+    logger.info(`Perfil actualizado para usuario: ${user.email}`);
+
+    // Respuesta sin password_hash
+    const userData = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      fullname: user.fullname,
+      profile_picture: user.profile_picture,
+      subscription_plan: user.subscription_plan,
+      is_trial: user.is_trial,
+      auth_provider: user.auth_provider,
+      updated_at: user.updated_at
+    };
+
+    res.json({
+      success: true,
+      message: 'Perfil actualizado exitosamente',
+      data: userData
+    });
+
+  } catch (error) {
+    logger.error('Error actualizando perfil:', error.message);
+    
+    if (error.name === 'SequelizeValidationError') {
+      return res.status(400).json({
+        success: false,
+        message: 'Datos inválidos: ' + error.errors.map(e => e.message).join(', ')
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor'
+    });
+  }
+};
+
 module.exports = {
   getUserProfile,
+  updateUserProfile,
   registerCompany,
   updateCompany
 };

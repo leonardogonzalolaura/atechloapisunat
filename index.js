@@ -31,11 +31,32 @@ module.exports = function main (options, cb) {
 
   // Start server
   server = app.listen(PORT, async ()=> {
+    // Log database configuration (sin password)
+    logger.info('Database config:', {
+      host: process.env.DB_HOST,
+      port: process.env.DB_PORT,
+      database: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD ? 'SET' : 'NOT SET'
+    });
+    
     try {
+      logger.info('Attempting database connection...');
       await sequelize.authenticate();
       logger.info('Database connected successfully');
     } catch (error) {
       logger.error('Unable to connect to database:', error.message);
+      logger.error('Error details:', {
+        name: error.name,
+        code: error.code,
+        errno: error.errno,
+        sqlState: error.sqlState,
+        sqlMessage: error.sqlMessage
+      });
+      console.error('Full database error:', error);
+      
+      // Intentar conexión básica para diagnosticar
+      logger.error('Connection string would be:', `mysql://${process.env.DB_USER}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`);
     }
     
     const serverUrl = process.env.NODE_ENV === 'production' 
