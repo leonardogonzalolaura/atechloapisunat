@@ -125,7 +125,7 @@ const getUserProfile = async (req, res) => {
     // Formatear empresas con rol
     const companies = user.companies.map(company => ({
       id: company.id,
-      ruc: company.rut,
+      ruc: company.ruc,
       name: company.name,
       business_name: company.business_name,
       legal_representative: company.legal_representative,
@@ -176,10 +176,10 @@ const getUserProfile = async (req, res) => {
  *           schema:
  *             type: object
  *             required:
- *               - rut
+ *               - ruc
  *               - name
  *             properties:
- *               rut:
+ *               ruc:
  *                 type: string
  *                 example: "20123456789"
  *               name:
@@ -251,7 +251,7 @@ const getUserProfile = async (req, res) => {
  *                         id:
  *                           type: integer
  *                           example: 1
- *                         rut:
+ *                         ruc:
  *                           type: string
  *                           example: "20123456789"
  *                         name:
@@ -263,7 +263,7 @@ const getUserProfile = async (req, res) => {
  *       400:
  *         description: Datos inválidos
  *       409:
- *         description: RUT ya existe
+ *         description: RUC ya existe
  *       500:
  *         description: Error interno del servidor
  */
@@ -280,16 +280,16 @@ const registerCompany = async (req, res) => {
     if (!ruc || !name) {
       return res.status(400).json({
         success: false,
-        message: 'RUT y nombre son requeridos'
+        message: 'RUC y nombre son requeridos'
       });
     }
 
-    // Verificar si el RUT ya existe
-    const existingCompany = await Company.findOne({ where: { rut } });
+    // Verificar si el RUC ya existe
+    const existingCompany = await Company.findOne({ where: { ruc } });
     if (existingCompany) {
       return res.status(409).json({
         success: false,
-        message: 'El RUT ya está registrado'
+        message: 'El RUC ya está registrado'
       });
     }
 
@@ -318,7 +318,7 @@ const registerCompany = async (req, res) => {
       role
     });
 
-    logger.info(`Empresa registrada: ${name} (${rut}) por usuario: ${userId}`);
+    logger.info(`Empresa registrada: ${name} (${ruc}) por usuario: ${userId}`);
 
     res.status(201).json({
       success: true,
@@ -389,7 +389,7 @@ const registerCompany = async (req, res) => {
  *               business_name:
  *                 type: string
  *                 example: "Mi Empresa Sociedad Anónima Cerrada"
- *               rut:
+ *               ruc:
  *                 type: string
  *                 example: "20123456789"
  *               legal_representative:
@@ -470,11 +470,11 @@ const updateCompany = async (req, res) => {
       });
     }
 
-    // Si se está actualizando el RUT, verificar que no exista
+    // Si se está actualizando el RUC, verificar que no exista
     if (updateData.ruc && updateData.ruc !== company.ruc) {
       const existingCompany = await Company.findOne({ 
         where: { 
-          rut: updateData.rut,
+          ruc: updateData.ruc,
           id: { [Op.ne]: companyId } // Excluir la empresa actual
         } 
       });
@@ -482,7 +482,7 @@ const updateCompany = async (req, res) => {
       if (existingCompany) {
         return res.status(409).json({
           success: false,
-          message: 'El RUT ya está registrado por otra empresa'
+          message: 'El RUC ya está registrado por otra empresa'
         });
       }
     }
@@ -497,7 +497,7 @@ const updateCompany = async (req, res) => {
       message: 'Empresa actualizada exitosamente',
       data: {
         id: company.id,
-        rut: company.rut,
+        ruc: company.ruc,
         name: company.name,
         business_name: company.business_name,
         legal_representative: company.legal_representative,
